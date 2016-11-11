@@ -40,8 +40,32 @@ def extract_names(filename):
   followed by the name-rank strings in alphabetical order.
   ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
   """
-  # +++your code here+++
-  return
+  f = open(filename)
+  ret =[]
+  head = True 
+  tmp =[]
+  for lines in f:
+	#print lines
+	
+	idx = re.search(r'<h3 align="center">[\w\d\s]+<',lines)
+	if idx:
+		#print idx.group()
+		str= re.split("[><]",idx.group())
+		str1=str[-2].split()
+		ret.append(str1[2])
+	match = re.findall(r'td\>[\w]+\<\/td',lines)
+	if match:
+		i=0
+		for s in match:
+			str2 = re.split("[><]",s)
+			if i==0: 
+				i = str2[1] 
+				
+			else:
+				tmp.append(str2[1]+" "+i)
+  ret.extend(sorted(tmp))
+  print ret		
+  return ret
 
 
 def main():
@@ -61,6 +85,8 @@ def main():
     del args[0]
 
   # +++your code here+++
+  for f in args[1:]:
+  	extract_names(f)
   # For each filename, get the names, then either print the text output
   # or write it to a summary file
   
