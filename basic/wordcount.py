@@ -45,8 +45,40 @@ import sys
 # and builds and returns a word/count dict for it.
 # Then print_words() and print_top() can just call the utility function.
 
-###
+def readf(filename):
+	return open(filename).read().split()
 
+def print_words(filename):
+	content = readf(filename)
+	dict ={}
+	for s in content:
+		i_s = s.lower()
+		if i_s not in dict:
+			dict[i_s]=1
+		else:
+			dict[i_s]+=1	 
+
+	for k in sorted(dict.keys()):
+		print k+" "+str(dict[k])
+
+def print_top(filename):
+	content = readf(filename)
+	dict ={}
+	for s in content:
+		i_s = s.lower()
+		if i_s not in dict:
+			dict[i_s]=1
+		else:
+			dict[i_s]+=1	 
+        i=0
+	for k in sorted(dict,key=dict.get, reverse=True):
+		print k+" "+str(dict[k])
+
+		i+=1
+		if i==20:break
+
+
+	
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
 def main():
