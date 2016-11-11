@@ -78,6 +78,13 @@ def sort2(i):
 	return i[1:]
 def sort3(i):
 	return i[len(i)-1]
+
+'''
+>>> results = [('10', 'Mary'), ('9', 'John'), ('10', 'George'), ('9', 'Frank'), ('9', 'Adam')]
+>>> results.sort(key=lambda x: (int(x[0]), x[1]), reverse=True)
+>>> results
+[('10', 'Mary'), ('10', 'George'), ('9', 'John'), ('9', 'Frank'), ('9', 'Adam')]
+'''
 # Simple provided test() function used in main() to print
 # what each function returns vs. what it's supposed to return.
 def test(got, expected):
