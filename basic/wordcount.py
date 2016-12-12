@@ -71,7 +71,9 @@ def print_top(filename):
 		else:
 			dict[i_s]+=1	 
         i=0
-	for k,v in sorted(dict.items(), key=lambda t: (t[1], -1* ord(t[0][0])), reverse=True):
+	#for k,v in sorted(dict.items(), key=lambda t: (t[1], -1* ord(t[0][0])), reverse=True):
+	for k,v in sorted(dict.items(), key=sortMap):
+
 		print k, v
 		#print k+" "+str(dict[k])
 
@@ -79,8 +81,9 @@ def print_top(filename):
 		if i==20:break
 
 def sortMap(i):
-	print i
-	return i[1], i[0]
+	#print i[0],i[1]
+	#print "---"
+	return (-i[1], i[0])
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
