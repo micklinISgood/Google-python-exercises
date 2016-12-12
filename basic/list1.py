@@ -77,7 +77,7 @@ def sort1(i):
 def sort2(i):
 	return i[1:]
 def sort3(i):
-	return i[len(i)-1]
+	return i[-1]
 
 '''
 >>> results = [('10', 'Mary'), ('9', 'John'), ('10', 'George'), ('9', 'Frank'), ('9', 'Adam')]
