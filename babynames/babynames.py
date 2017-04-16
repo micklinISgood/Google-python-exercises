@@ -42,30 +42,26 @@ def extract_names(filename):
   """
   f = open(filename)
   ret =[]
+  tmp = []
   head = True 
-  tmp =[]
-  for lines in f:
-	#print lines
-	
-	idx = re.search(r'<h3 align="center">[\w\d\s]+<',lines)
-	if idx:
-		#print idx.group()
-		str= re.split("[><]",idx.group())
-		str1=str[-2].split()
-		ret.append(str1[2])
-	match = re.findall(r'td\>[\w]+\<\/td',lines)
-	if match:
-		i=0
-		for s in match:
-			str2 = re.split("[><]",s)
-			if i==0: 
-				i = str2[1] 
-				
-			else:
-				tmp.append(str2[1]+" "+i)
+  match = re.search(r'baby(\d+)\.',filename)
+
+  if match:
+    #year 
+    ret.append(match.group(1))
+  for line in f:
+    match = re.search(r'<tr align="right"><td>(\d+)</td><td>(\w+)</td><td>(\w+)</td>',line)
+    if match:
+      tmp.append( match.group(2)+" "+ match.group(1))
+      tmp.append( match.group(3)+" "+ match.group(1))
   ret.extend(sorted(tmp))
-  print ret		
-  return ret
+  # print ret	
+
+  w = open(filename+".summary", "w")
+  for l in ret:
+    w.write(l+'\n')
+  w.close()	
+
 
 
 def main():
@@ -84,7 +80,10 @@ def main():
     summary = True
     del args[0]
 
+  if not summary: extract_names(args[0])
+
   # +++your code here+++
+  # print args
   for f in args[1:]:
   	extract_names(f)
   # For each filename, get the names, then either print the text output
