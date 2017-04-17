@@ -25,6 +25,16 @@ def read_urls(filename):
   Screens out duplicate urls and returns the urls sorted into
   increasing order."""
   # +++your code here+++
+  ret = []
+  try:
+    f = open(filename,'r')
+    text = f.read()
+    match = re.findall(r'GET (\S+puzzle\S+) ',text)
+    de_dup = set(match)
+    ret.extend(sorted(list(de_dup)))
+    return ret
+  except Exception as e:
+    print e, filename
   
 
 def download_images(img_urls, dest_dir):
@@ -35,7 +45,18 @@ def download_images(img_urls, dest_dir):
   with an img tag to show each local image file.
   Creates the directory if necessary.
   """
-  # +++your code here+++
+  if not os.path.exists(dest_dir): os.mkdir(dest_dir)
+  i = 0
+  print len(img_urls)
+  for img_url in img_urls:
+    if not os.path.exists(os.path.join(dest_dir,"img"+str(i)+".jpg")):
+      urllib.urlretrieve("http://code.google.com/"+img_url,os.path.join(dest_dir,"img"+str(i)+".jpg"))
+    i += 1
+  w = open(os.path.join(dest_dir,"index.html"),'w')
+  w.write('<html><body>')
+  for x in range(i): w.write('<img src ="img'+str(x)+'.jpg">')
+  w.write('</html></body>')
+  w.close()
   
 
 def main():
