@@ -17,8 +17,26 @@ import commands
 
 # +++your code here+++
 # Write functions and modify main() to call them
+def zipSpecial(zipname, fromdir):
+    cmd = 'zip -j ' + zipname+ ' '
+    for specialfile in listSpecial(fromdir):
+        cmd += specialfile+" "
+    status, output = commands.getstatusoutput(cmd)
+    print output
 
+def copySpecial(todir, fromdir):
+    if not os.path.exists(todir): os.mkdir(todir)
+    for copyfile in listSpecial(fromdir):
+      # print os.path.basename(copyfile)
+      shutil.copy(copyfile, os.path.join(todir,os.path.basename(copyfile)))
 
+def listSpecial(dir):
+    ret = []
+    for filename in os.listdir(dir):
+        match = re.search(r'\w+__\w+__',filename)
+        if match:
+            ret.append(os.path.join(os.path.abspath(dir),filename))
+    return ret
 
 def main():
   # This basic command line argument parsing code is provided.
@@ -37,13 +55,18 @@ def main():
   todir = ''
   if args[0] == '--todir':
     todir = args[1]
+    fromdir = args[2]
+    copySpecial(todir, fromdir)
     del args[0:2]
 
   tozip = ''
   if args[0] == '--tozip':
-    tozip = args[1]
+    zipname = args[1]
+    fromdir = args[2]
+    zipSpecial(zipname, fromdir)
     del args[0:2]
 
+  listSpecial(args[0])
   if len(args) == 0:
     print "error: must specify one or more dirs"
     sys.exit(1)
