@@ -29,9 +29,17 @@ def read_urls(filename):
   try:
     f = open(filename,'r')
     text = f.read()
-    match = re.findall(r'GET (\S+puzzle\S+) ',text)
-    de_dup = set(match)
-    ret.extend(sorted(list(de_dup)))
+    match = re.findall(r'GET (\S+puzzle\S+-\w+-(\S+)\.jpg) ',text)
+    if match:
+      # ('/edu/languages/google-python-class/images/puzzle/p-bjcd-bbbf.jpg', 'bbbf')
+      de_dup = set(match)
+      sortsecond = sorted(list(de_dup), key= lambda x: x[1])
+      for item in sortsecond: ret.append(item[0])
+    else:
+      match = re.findall(r'GET (\S+puzzle\S+) ',text)
+      de_dup = set(match)
+      ret.extend(sorted(list(de_dup)))
+    
     return ret
   except Exception as e:
     print e, filename
@@ -46,15 +54,17 @@ def download_images(img_urls, dest_dir):
   Creates the directory if necessary.
   """
   if not os.path.exists(dest_dir): os.mkdir(dest_dir)
-  i = 0
+  names = []
   print len(img_urls)
   for img_url in img_urls:
-    if not os.path.exists(os.path.join(dest_dir,"img"+str(i)+".jpg")):
-      urllib.urlretrieve("http://code.google.com/"+img_url,os.path.join(dest_dir,"img"+str(i)+".jpg"))
-    i += 1
+    #basename(img_url) get filename
+    img_name = os.path.basename(img_url)
+    if not os.path.exists(os.path.join(dest_dir,img_name)):
+      urllib.urlretrieve("http://code.google.com/"+img_url,os.path.join(dest_dir,img_name))
+    names.append(img_name)
   w = open(os.path.join(dest_dir,"index.html"),'w')
   w.write('<html><body>')
-  for x in range(i): w.write('<img src ="img'+str(x)+'.jpg">')
+  for name in names: w.write('<img src ="'+name+'">')
   w.write('</html></body>')
   w.close()
   
